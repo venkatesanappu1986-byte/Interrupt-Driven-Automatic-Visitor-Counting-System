@@ -1,84 +1,152 @@
 # Interrupt-Driven Automatic Visitor Counting System
 
-An embedded system that automatically counts the number of people entering and exiting a room using a pair of IR sensors, hardware interrupts, and a microcontroller. The system is "interrupt-driven," meaning the microcontroller stays idle and only reacts when a sensor detects a visitor — instead of continuously polling the sensors — making it faster to respond and more power-efficient.
+An Interrupt-Driven Automatic Visitor Counting System developed using the **LPC2129 (ARM7) Microcontroller**. The system utilizes **External Interrupts (EINT0 & EINT1)** to detect people entering and exiting a room through IR sensors. The **Visitors Count** is updated in real time, enabling automatic room light control and live occupancy monitoring on a **20×4 LCD Display**.
+
+---
+
+# Project Overview
+
+This project demonstrates the implementation of an interrupt-driven embedded system for monitoring room occupancy.
+
+Two IR sensors are placed at the entry and exit points of the room.
+
+- **IR Sensor 1** is connected to **External Interrupt 0 (EINT0)** and detects people entering the room.
+- **IR Sensor 2** is connected to **External Interrupt 1 (EINT1)** and detects people exiting the room.
+
+Whenever either sensor detects a person, the corresponding external interrupt is triggered immediately. This eliminates the need for continuous polling and allows the system to respond quickly while reducing CPU utilization.
+
+The **Visitors Count** is continuously displayed on a **20×4 LCD**.
+
+An **Indication LED** blinks whenever an entry or exit is detected.
+
+A **Room Light LED** is automatically controlled based on the Visitors Count:
+
+- **Visitors Count > 0 → Room Light ON**
+- **Visitors Count = 0 → Room Light OFF**
+
+The switch is pressed at a time both total entered and exited person count is shown in the LCD  and it will return back to the normal
+person count.
+
+---
+
+# Features
+
+- Interrupt-driven visitor counting
+- Real-time Visitors Count display
+- Automatic Room Light control
+- Entry and Exit detection using IR Sensors
+- Indication LED for entry/exit events
+- Displays People Entered and People Exited using a Switch
+- Automatically returns to Visitors 
+- Efficient implementation with reduced CPU utilization
+
+---
+
+# Hardware Components
+
+- LPC2129 Microcontroller
+- 20×4 LCD Display
+- 2 × IR Sensors
+- Power Supply
+- Room Light LED
+- Connecting Wires
+- Switch
+- Indication LED
 
 
+---
 
-## Features
+# Software Used
 
-- Real-time visitor counting using interrupt service routines (ISRs)
-- Bidirectional detection (distinguishes entry vs. exit using two IR sensors)
-- Live count displayed on an LCD (e.g. 16x2)
-- Low power consumption — MCU stays in idle/sleep state until a sensor triggers an interrupt
-- Optional automatic light/relay control based on occupancy (ON when count > 0, OFF when room is empty)
+- Embedded C
+- Keil uVision
+- Flash Magic
 
-## How It Works
+---
 
-1. Two IR transmitter-receiver pairs are placed a short distance apart at the entrance/exit.
-2. When a visitor breaks the IR beam, the receiver's output triggers a hardware interrupt on the microcontroller.
-3. The order in which the two sensors are triggered determines direction:
-   - Sensor 1 → Sensor 2 triggered in sequence = **entry** (count incremented)
-   - Sensor 2 → Sensor 1 triggered in sequence = **exit** (count decremented)
-4. The ISR updates a global counter variable and returns control to the main program.
-5. The current count is displayed on the LCD in real time.
+# Working Principle
 
-## Hardware Requirements
+## Entry Detection
 
-| Component | Notes |
-|---|---|
-| Microcontroller | *(e.g. Arduino Uno / 8051 — update to match your board)* |
-| IR Sensor Modules x2 | Transmitter + receiver pair, placed at entry/exit |
-| 16x2 LCD Display | Displays live visitor count |
-| Relay Module (optional) | For automatic light control |
-| Resistors, jumper wires, breadboard/PCB | Supporting components |
-| Power Supply | 5V regulated supply |
+- IR Sensor 1 is connected to **External Interrupt 0 (EINT0)**.
+- When a person enters the room, **EINT0** is triggered.
+- The **Visitors Count** is incremented.
+- The **People Entered** count is incremented.
+- The Indication LED blinks like a (BUZZER).
+- The LCD updates the Visitors Count.
+- Whenever the count will atleast one the another led is ON.
 
-## Pin Configuration
+---
 
-*(Update this table with your actual wiring)*
+## Exit Detection
 
-| MCU Pin | Connected To |
-|---|---|
-| INT0 | IR Sensor 1 output |
-| INT1 | IR Sensor 2 output |
-| Digital Pins | LCD (RS, EN, D4–D7) |
-| Digital Pin | Relay IN (optional) |
+- IR Sensor 2 is connected to **External Interrupt 1 (EINT1)**.
+- When a person exits the room, **EINT1** is triggered.
+- The **Visitors Count** is decremented.
+- The **People Exited** count is incremented.
+- The Indication LED blinks like a (BUZZER).
+- The LCD updates the Visitors Count.
+- Whenever the count will zero  the another led is OFF.
 
-## Software / Requirements
+---
 
-- *(e.g. Arduino IDE 1.8+ or Keil uVision for 8051)*
-- Required libraries: *(e.g. `LiquidCrystal.h`)*
+## Automatic Room Light Control
 
-## Getting Started
+The Room Light LED operates automatically according to the Visitors Count.
 
-```bash
-git clone https://github.com/venkatesanappu1986-byte/Interrupt-Driven-Automatic-Visitor-Counting-System.git
-cd Interrupt-Driven-Automatic-Visitor-Counting-System
+| Visitors Count | Room Light |
+|----------------|------------|
+| Greater than 0 | ON |
+| Equal to 0 | OFF |
+
+---
+
+## LCD Display
+
+The **20×4 LCD** continuously displays the **Visitors Count**, representing the number of people currently present inside the room.
+
+Example:
+
+```text
+visitor count  :1
+Visitors Count :5
 ```
 
-1. Open the source file in your IDE (Arduino IDE / Keil / etc.)
-2. Connect the hardware as per the pin configuration above
-3. Compile and upload/flash the code to your microcontroller
-4. Power on the circuit — the LCD should initialize and show a count of 0
-5. Walk through the sensor pair to test entry/exit counting
+When the **Switch** is pressed, the LCD displays:
 
-## Applications
+```text
+People Entered : 18
+People Exited  : 13
+```
+---
 
-- Seminar halls, conference rooms, classrooms
-- Shopping malls, temples, offices
-- Occupancy-based automatic lighting control
-- Crowd/capacity monitoring for restricted-capacity venues
+# Interrupt Configuration
 
-## Future Improvements
+| Interrupt | Connected Device | Function |
+|-----------|------------------|----------|
+| EINT0 | IR Sensor 1 | Detect Entry |
+| EINT1 | IR Sensor 2 | Detect Exit |
 
-- IoT connectivity for remote/cloud monitoring
-- Data logging with timestamps
-- Buzzer/alert when capacity limit is exceeded
 
-## License
+#  Applications
 
-*(Add your license here, e.g. MIT)*
+- Offices
+- Libraries
+- Classrooms
+- Laboratories
+- Conference Rooms
+- Shopping Malls
+- Meeting Halls
 
-## Author
+---
 
-*(Your name / GitHub handle)*
+#  Advantages
+
+- Fast response using hardware interrupts
+- Accurate room occupancy monitoring
+- Automatic Room Light control
+- Low CPU utilization
+- Energy-efficient operation
+- Reliable and real-time performance
+
+---
