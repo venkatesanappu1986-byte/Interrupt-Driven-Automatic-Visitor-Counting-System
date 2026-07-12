@@ -2,7 +2,7 @@
 
 An embedded system that automatically counts the number of people entering and exiting a room using a pair of IR sensors, hardware interrupts, and a microcontroller. The system is "interrupt-driven," meaning the microcontroller stays idle and only reacts when a sensor detects a visitor — instead of continuously polling the sensors — making it faster to respond and more power-efficient.
 
-> ⚠️ **Note:** This README is a starting template. Please update the sections marked below (hardware, pin mapping, file names) to match your actual implementation.
+
 
 ## Features
 
