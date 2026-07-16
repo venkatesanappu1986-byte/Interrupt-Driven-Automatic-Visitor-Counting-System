@@ -1,19 +1,18 @@
 #include<lpc21xx.h>
-void delay_sec(unsigned int);
-void delay_ms(unsigned int);
-void delay_sec(unsigned int sec)
+void delay_second(unsigned int s)
 {
-        T0PR=15000000-1;
-        T0TCR=0X1;
-        while(T0TC<sec);
-        T0TCR=0X3;
-        T0TCR=0X0;
+T0PR=15000000-1;
+T0TCR=0X01;
+while(T0TC<s);
+T0TCR=0X03;
+T0TCR=0X00;
 }
-void delay_ms(unsigned int ms)
+
+void delay_millisecond(unsigned int ms)
 {
-        T0PR=15000-1;
-        T0TCR=0X1;
-        while(T0TC<ms);
-        T0TCR=0X3;
-        T0TCR=0X0;
+T0PR=15000-1;
+T0TCR=0X01;
+while(T0TC<ms);
+T0TCR=0X03;
+T0TCR=0X00;
 }
