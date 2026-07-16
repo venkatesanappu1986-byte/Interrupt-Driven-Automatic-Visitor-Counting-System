@@ -24,6 +24,8 @@ int count=0;
  }
  int main()
  {
+   IOSET0=LED;
+   IOSET0=BUZZER;
    PINSEL0|=0x20000000;
    PINSEL1|=0X01;
    IODIR0|=LED|BUZZER|LCD_D|RS|E;
